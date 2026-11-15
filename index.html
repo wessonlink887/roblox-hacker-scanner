@@ -3,43 +3,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Roblox Security Hub</title>
 <style>
 body {
-  background:#090b12;
-  color:white;
-  font-family:Arial,sans-serif;
-  text-align:center;
-  padding:20px;
+ background:#090b12;
+ color:white;
+ font-family:Arial;
+ text-align:center;
+ padding:20px;
 }
 h1 {color:#ef294d;}
 .box {
-  background:#171b29;
-  padding:25px;
-  border-radius:20px;
-  margin:35px auto;
-  max-width:400px;
+ background:#171b29;
+ padding:25px;
+ border-radius:20px;
+ margin:30px auto;
+ max-width:400px;
 }
 input,button {
-  box-sizing:border-box;
-  width:100%;
-  padding:15px;
-  margin:10px 0;
-  border:0;
-  border-radius:10px;
-  font-size:16px;
+ box-sizing:border-box;
+ width:100%;
+ padding:15px;
+ margin:10px 0;
+ border:0;
+ border-radius:10px;
+ font-size:16px;
 }
 button {
-  background:#e32645;
-  color:white;
-  font-weight:bold;
+ background:#e32645;
+ color:white;
+ font-weight:bold;
 }
-#result {
-  color:#42e88b;
-  overflow-wrap:anywhere;
-}
-a {color:#42e88b;}
+#result {color:#42e88b;overflow-wrap:anywhere;}
+#strength {font-size:20px;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -48,47 +45,78 @@ a {color:#42e88b;}
 
 <div class="box">
 <h2>Username Checker</h2>
-<input id="username"
-placeholder="Enter Roblox username">
+<input id="username" placeholder="Roblox username">
 <button onclick="checkUser()">CHECK USER</button>
 <p id="result">Ready to scan</p>
 </div>
 
 <div class="box">
+<h2>Password Security Checker</h2>
+<p>Use a made-up test password, never your real password.</p>
+<input id="password" type="password"
+placeholder="Enter test password">
+<button onclick="checkPassword()">CHECK STRENGTH</button>
+<p id="strength">Waiting for test...</p>
+<p id="details"></p>
+</div>
+
+<div class="box">
 <h2>Account Safety</h2>
 <p>Never share your password or login cookies.</p>
-<p>Enable Roblox two-step verification.</p>
+<p>Enable two-step verification.</p>
 <p>Use a unique password.</p>
 </div>
 
 <script>
 function checkUser() {
-  const name = document
-    .getElementById("username")
-    .value.trim();
+ const name=document.getElementById("username").value.trim();
+ const result=document.getElementById("result");
+ if(!name) {
+  result.textContent="Enter a username!";
+  return;
+ }
+ const link=document.createElement("a");
+ link.href="https://www.roblox.com/search/users?keyword="+encodeURIComponent(name);
+ link.target="_blank";
+ link.rel="noopener noreferrer";
+ link.textContent="OPEN ROBLOX USER SEARCH";
+ link.style.color="#42e88b";
+ result.textContent="Search ready: ";
+ result.appendChild(link);
+}
 
-  const result = document
-    .getElementById("result");
+function checkPassword() {
+ const p=document.getElementById("password").value;
+ const strength=document.getElementById("strength");
+ const details=document.getElementById("details");
 
-  if (!name) {
-    result.textContent = "Enter a username!";
-    return;
-  }
+ if(!p) {
+  strength.textContent="Enter a test password!";
+  details.textContent="";
+  return;
+ }
 
-  const link = document.createElement("a");
+ let score=0;
+ const checks=[
+  [p.length>=12,"At least 12 characters"],
+  [/[a-z]/.test(p),"Lowercase letters"],
+  [/[A-Z]/.test(p),"Uppercase letters"],
+  [/[0-9]/.test(p),"Numbers"],
+  [/[^A-Za-z0-9]/.test(p),"Special characters"]
+ ];
 
-  link.href =
-    "https://www.roblox.com/search/users?keyword=" +
-    encodeURIComponent(name);
+ checks.forEach(c=>{if(c[0])score++;});
 
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  link.textContent = "OPEN ROBLOX USER SEARCH";
+ if(score<=2) strength.textContent="Weak";
+ else if(score<=3) strength.textContent="Fair";
+ else if(score===4) strength.textContent="Strong";
+ else strength.textContent="Very strong";
 
-  result.textContent = "Search ready: ";
-  result.appendChild(link);
+ details.textContent=checks.map(c=>
+  (c[0]?"✓ ":"✗ ")+c[1]
+ ).join(" | ");
+
 }
 </script>
-
 </body>
 </html>
