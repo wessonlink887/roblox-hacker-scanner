@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roblox Hacker Scanner</title>
+<style>
+body {
+  background:#090b12;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+  padding:25px;
+}
+.box {
+  background:#171b29;
+  padding:25px;
+  border-radius:15px;
+  margin-top:40px;
+}
+input,button {
+  padding:14px;
+  margin:8px;
+  border:0;
+  border-radius:8px;
+}
+button {
+  background:#e32645;
+  color:white;
+  font-weight:bold;
+}
+#result {color:#42e88b;}
+</style>
+</head>
+<body>
+<h1>ROBLOX SECURITY HUB</h1>
+<div class="box">
+<h2>Username Checker</h2>
+<input id="username" placeholder="Enter Roblox username">
+<br>
+<button onclick="checkUser()">CHECK USER</button>
+<p id="result">Ready to scan</p>
+</div>
+<script>
+async function checkUser() {
+ const name = document.getElementById("username").value.trim();
+ const result = document.getElementById("result");
+ if (!name) {
+  result.textContent = "Enter a username!";
+  return;
+ }
+ result.textContent = "Checking...";
+ try {
+  const response = await fetch(
+   "https://users.roblox.com/v1/usernames/users",
+   {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+     usernames:[name],
+     excludeBannedUsers:false
+    })
+   }
+  );
+  const data = await response.json();
+  result.textContent = data.data.length
+   ? "Username found! User ID: " + data.data[0].id
+   : "Username not found.";
+ } catch(e) {
+  result.textContent = "Could not connect. Try again.";
+ }
+}
+</script>
+</body>
+</html>
