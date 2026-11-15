@@ -1,1 +1,94 @@
-result.textContent = "Could not connect. Try again.";
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roblox Security Hub</title>
+<style>
+body {
+  background:#090b12;
+  color:white;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  padding:20px;
+}
+h1 {color:#ef294d;}
+.box {
+  background:#171b29;
+  padding:25px;
+  border-radius:20px;
+  margin:35px auto;
+  max-width:400px;
+}
+input,button {
+  box-sizing:border-box;
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+}
+button {
+  background:#e32645;
+  color:white;
+  font-weight:bold;
+}
+#result {
+  color:#42e88b;
+  overflow-wrap:anywhere;
+}
+a {color:#42e88b;}
+</style>
+</head>
+<body>
+
+<h1>ROBLOX SECURITY HUB</h1>
+
+<div class="box">
+<h2>Username Checker</h2>
+<input id="username"
+placeholder="Enter Roblox username">
+<button onclick="checkUser()">CHECK USER</button>
+<p id="result">Ready to scan</p>
+</div>
+
+<div class="box">
+<h2>Account Safety</h2>
+<p>Never share your password or login cookies.</p>
+<p>Enable Roblox two-step verification.</p>
+<p>Use a unique password.</p>
+</div>
+
+<script>
+function checkUser() {
+  const name = document
+    .getElementById("username")
+    .value.trim();
+
+  const result = document
+    .getElementById("result");
+
+  if (!name) {
+    result.textContent = "Enter a username!";
+    return;
+  }
+
+  const link = document.createElement("a");
+
+  link.href =
+    "https://www.roblox.com/search/users?keyword=" +
+    encodeURIComponent(name);
+
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "OPEN ROBLOX USER SEARCH";
+
+  result.textContent = "Search ready: ";
+  result.appendChild(link);
+}
+</script>
+
+</body>
+</html>
